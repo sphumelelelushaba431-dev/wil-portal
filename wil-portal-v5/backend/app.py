@@ -7,7 +7,11 @@ from werkzeug.utils import secure_filename
 import uuid, hashlib, os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, origins=[
+    "https://wil-portal.netlify.app",  
+    "https://wil-portal.vercel.app",   
+    "http://localhost:3000"            
+])
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wil_portal.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
