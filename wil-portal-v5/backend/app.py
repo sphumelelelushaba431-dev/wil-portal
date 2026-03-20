@@ -7,14 +7,6 @@ from werkzeug.utils import secure_filename
 import uuid, hashlib, os
 
 app = Flask(__name__)
-<<<<<<< HEAD
-=======
-CORS(app, supports_credentials=True, origins=[
-    "https://wil-portal.netlify.app",  
-    "https://wil-portal.vercel.app",   
-    "http://localhost:3000"            
-])
->>>>>>> 3ffc0a978d40bd0e3b6852fb429c7a1e6f8fd433
 
 # ── CORS — allow both local dev and deployed frontend ──────────
 allowed_origins = [
