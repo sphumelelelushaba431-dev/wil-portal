@@ -7,9 +7,25 @@ from werkzeug.utils import secure_filename
 import uuid, hashlib, os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///wil_portal.db')
+# ── CORS — allow both local dev and deployed frontend ──────────
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
+# Add production frontend URL from environment variable if set
+frontend_url = os.environ.get('FRONTEND_URL')
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
+CORS(app, supports_credentials=True, origins=allowed_origins)
+
+# ── Database — fix Render's postgres:// → postgresql:// ────────
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///wil_portal.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.secret_key = os.environ.get('SECRET_KEY', 'change-me-in-production')
